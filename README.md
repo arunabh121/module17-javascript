@@ -1,4 +1,6 @@
 # Module 17: JavaScript
+> JavaScript for Snake People
+
 **JavaScript**  is a popular, high-level, general-purpose programming language primarily used for implementing interactive web applications and other information systems. JavaScript shares many structural (and even some syntactical) similarities with Python; the places where it differ often draws from other major major languages like Java and C (and thus are good styles to be familiar with). Overall, this makes JavaScript a useful second language to learn: programs will utilize similar structures, but demonstrate how code syntax can be abstracted in more general programming practices.
 
 This module introduces the basic syntax of the JavaScript language, including variables, control structures, and functions. **Note** that this introduction assumes familiarity with Python, and introduces concepts in contrast to that languages. For more general purpose introductions, see the below resources.
@@ -8,6 +10,22 @@ This module introduces the basic syntax of the JavaScript language, including va
 **Contents**
 
 - [Resources](#resources)
+- [Programming with JavaScript](#programming-with-javascript)
+  - [History and Versions](#history-and-versions)
+  - [Running JavaScript](#running-javascript)
+- [JavaScript Basics](#javascript-basics)
+  - [Strict Mode](#strict-mode)
+- [Variables](#variables)
+  - [Basic Data Types](#basic-data-types)
+    - [Type Conversion](#type-conversion)
+  - [Arrays](#arrays)
+  - [Objects](#objects)
+- [Control Structures](#control-structures)
+  - [Conditionals](#conditionals)
+  - [Loops](#loops)
+- [Functions](#functions)
+  - [Functional Programming](#functional-programming)
+    - [Array Loops](#array-loops)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -181,12 +199,12 @@ JavaScript supports the similar basic data types as Python:
   !boolOne //not (exclamation point)
 
   //combining
-  A || !B      //A or not B
-  !A && B      //not A and also B
-  !(A && B)    //not (A and B both)
-  (!A) || (!B) //not A or not B
+  P || !Q       //P or not Q
+  !P && Q       //not P and also Q
+  !(P && Q)     //not (P and Q both)
+  (!P) || (!Q)  //not P or not Q
 
-  3 < x && x < 5 //not as cool as Python
+  3 < x && x < 5  //not as cool as Python
   ```
 
 #### Type Conversion
@@ -253,7 +271,7 @@ Object elements are also known as **properties**. For example, we say that the `
 Object values can be access via **bracket** notation, specifying the _key_ as the index. If a key does not have an explicit value associated with it, accessing that key produces `undefined` (the key's value is `undefined`).
 
 ```js
-var favorites = { music: 'jazz', food: 'pizza', numbers: [12, 42]};
+var favorites = {music: 'jazz', food: 'pizza', numbers: [12, 42]};
 
 //access variable
 console.log( favorites['music'] ); //'jazz'
@@ -273,7 +291,7 @@ console.log( favorites['numbers'][0] ); //12
 _Additionally_, object values can also be accessed via **dot notation**, as if the properties were _attributes_ of a class. This is often simpler to write and to read: remember to read the `.` as an `'s`!
 
 ```js
-var favorites = { music: 'jazz', food: 'pizza', numbers: [12, 42]};
+var favorites = {music: 'jazz', food: 'pizza', numbers: [12, 42]};
 
 //access variable
 console.log( favorites.music ); //'jazz'
@@ -300,17 +318,213 @@ var keys = Object.keys(ages); // [ 'sarah', 'amit', 'zhang' ]
 ```
 
 ## Control Structures
-<!-- //if
-  //blocks
-  //logical operators
-//while, for
-  //DO NOT USE `for ... in` ! -->
+JavaScript supports **control structures** (conditional `if` statements, `while` and `for` loops) in the same way that Python does, just with a slightly different syntax.
+
+### Conditionals
+A JavaScript **`if` statement** is written using the following syntax:
+
+```js
+if(condition){
+  //statements
+}
+else if(alternativeCondition) {
+  //stateements
+}
+else {
+  //statements
+}
+```
+
+- The **`condition`** can be any expression that evaluates to a Boolean value, and is placed inside parentheses. Note that in JavaScript _all_ values are either "truthy" or "falsey", meaning that when treated as a condition they are either considered "true" or "false". For example, `undefined` is considered a "falsey" value, so an `undefined` variable would be treated as a "false" condition. This allows for the following JavaScript idiom:
+
+  ```js
+  if(myVariable){ //check if variable exists (is defined)
+      //do stuff with myVariable
+  }
+  ```
+
+- In JavaScript, a **block** of statements (e.g., to conditionally execute) is written inside curly braces **`{}`**. JavaScript doesn't use intentation to designate blocks, though you should still indent blocks for readability.
+- As in Python, the `else if` and `else` clauses are optional.
+
+While the syntax may be different, the control flow impacts are the same as in Python: conditional statements can be nested, and subsequent `if` statements are not necessarily mutually exclusive!
+
+### Loops
+JavaScript supports **`while` loops** just like Python, with the syntactic change that conditions are listed in parentheses and blocks are written in curly braces:
+
+```js
+var count = 5;
+while(count > 0){
+   console.log(count);
+   count = count - 1;
+}
+console.log("Blastoff!");
+```
+
+JavaScript also provides a **`for` loop** used for _definite iteration_, such as when you know how many times you want to continue through the loop. To understand the `for` loop, consider the below loop for iterating through an array:
+
+```js
+var i = 0;
+while(i < array.length){
+   console.log(array[i]);
+   i++; //shortcut for i = i+1
+}
+```
+
+This loop has somewhat generic parts:
+
+1. It initializes the _loop control variable_ (`var i=0`)
+2. It checks the condition each time through the loop (`i < array.length`)
+3. It _increments_ the loop control variable at the end of the block (`i++`). The `++` is a short cut for "add 1 and reassign" (since statements such as `i=i+1` are so common)
+
+The JavaScript `for` loop combines these three steps into a single statement:
+
+```js
+for(var i=0; i<array.length; i++){
+  console.log(array[i]);
+}
+```
+
+Thus JavaScript makes it easy to keep track of a loop control variable (a counter), though you need to write out the initialization, condition, and update yourself.
+
+- This is equivalent to the Python `for i in range(len(array)):`
+
+**WARNGIN**: JavaScript _does_ have a `for ... in` syntax. However, it doesn't work as you would expect for arrays (it iterates over "enumerable properties" rather than the specific indices). Thus, best practice is to **not** use that construction, and instead use the above `for` loop (or better yet: the `forEach()` method described below).
+
+- If you need to iterate over the keys of an object, use the `Object.keys()` method to get an array to loop through!
+
 
 ## Functions
-<!-- //basic syntax
-//parameters are optional! -->
+And of course, JavaScript includes **functions** (named sequences of statements used to _abstract_ code) just like Python. JavaScript functions are written using the following syntax:
+
+```js
+//A function named `makeFullName` that takes two arguments
+//and returns the "full name" made from them
+function makeFullName(firstName, lastName) {
+  //Function body: perform tasks in here
+  var fullName = firsName + " " + lastName;
+
+  // Return: what you want the function to output
+  return fullName;
+}
+
+// Call the makeFullName function with the values "Alice" and "Kim"
+myName = makeFullName("Alice", "Kim")  // "Alice Kim"
+```
+
+- Functions are defined by using the **`function`** keyword (placed before the name of the function).
+- As with control structures, the **block** that is the function's _body_ is written in curly braces **`{}`**.
+
+Like Python, JavaScript variables are _scoped_ to functions: any variables declared within a function will not be available outside of it. Functions are able to access, modify, and assign variables that are at a _higher_ scope (e.g., global variables).
+
+- This includes the arguments, which are implicitly declared _local_ variables!
+
+JavaScript does not support named keyword arguments. However, in JavaScript _all arguments are optional_. Any argument that is _not_ (positionally) passed a specific value will be `undefined`. Any passed in value that does not have a variable defined for its position will not be assigned to a variable.
+
+```js
+function sayHello(name) {
+    return "Hello, "+name;
+}
+
+//expected: argument is assigned a value
+sayHello("Joel");  //"Hello, Joel"
+
+//argument not assigned value (left undefined)
+sayHello();  //"Hello, undefined"
+
+//extra arguments (values) are not assigned to variables, so are ignored
+sayHello("Joel","y'all");  //"Hello, Joel"
+```
+
+- If a function has an argument, that doesn't mean it got a value. If a function lacks an argument, that doesn't mean it wasn't given a value.
+
 
 ### Functional Programming
-<!-- //anonymous callbacks are HUGE in JS!
+**JavaScript functions ARE values**. This means that, as in Python, each function you define is in fact an object that can be assigned to other variables or passed around to other functions.
 
-//examples: `forEach`, `map`, etc --> -->
+```js
+function sayHello(name){
+  console.log("Hello, "+name);
+}
+
+//what kind of thing is `sayHello` ?
+typeof sayHello;  //'function'
+
+//assign the `sayHello` value to a new variable `greet`
+var greet = sayHello;
+
+//call the function assigned to the `greet` variable
+greet("world");  //prints "Hello world"
+```
+
+Just like arrays and objects can be written as literals which can be _anonymously_ passed into functions, JavaScript supports **anonymous functions** (similar to Python's anonymous lambdas):
+
+```js
+//Example: an anonymous function (no name!)
+//(We can't reference this without a name, so writing an anonymous function is
+//not a valid statement)
+function(person) {
+   console.log("Hello, "+person);
+}
+
+//anonymous function (value) assigned to variable
+//equivalent to the version in the previous example
+var sayHello = function(person) {
+   console.log("Hello, "+person);
+}
+```
+
+- You can think of this structure as equivalent to declaring and assigning an array `var myVar = [1,2,3]`... just in this case instead of taking the anonymous array (right-hand side) and giving it a name, we're taking an _anonymous function_ and giving it a name!
+
+Using **anonymous callback functions** are incredibly important in JavaScript programming. Many common built-in functions use callback functions to specify some type of behavior, and these callbacks are normally specified as anonymous functions (rather than clutter the namespace).
+
+#### Array Loops
+As a common example, **arrays** support a variety of methods for performing _functional looping_&mdash;in fact, this is the recommended way to loop through an array!
+
+We loop through an array by calling the [`forEach(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)`] function on that array. This function takes in a _callback function_ specifying what block of code to execute "for each" element:
+
+```js
+var array = ['a','b','c'];  //an array
+var printItem = function(item) {  //something to do to an array item
+   console.log(item);
+}
+
+array.forEach(printItem);  //do the "printItem" thing to EACH array item
+
+//it is much more common to use anonymous function
+array.forEach(function(item) {
+   console.log(item);
+});
+```
+
+- This is the (admittedly verbose) equivalent to Python's `for ... in` syntax.
+
+- In the last line, we basically take the anonymous function assign to `printItem` and "copy-paste" that literal definition as the argument to `forEach()`, instead of refering to the value by its name. This statement can be read as "take the `array` and `forEach` thing run this `function` on the `item`".
+
+- Be careful about the closing braces and parentheses at the end of the anonymous function version: the brace is ending the anonymous function's block (and so ending that value), and the parenthesis is closing the argument list of `forEach()`!
+
+- Fun fact: ES6 provides a syntactical shortcut for specifying anonymous functions that is less verbose called [arrow functions]().
+
+Arrays also provide `map()`, `filter()` and `reduce()` functions (similar to those in Python) that can be used to do functional-style programming and mirror the functionality provided by Python list comprehensions
+
+```js
+var array = [3,1,4,2,5];
+
+//map: return a new array of transformed items
+array.map(function(item) {
+   return item*2;   //transform each item into its double
+});  // [6, 2, 8, 4, 10]
+
+//filter: return a new array of items that meet the criteria
+array.filter(function(item){
+   return item >= 3;  //keep if large
+});  // [3, 4, 5]
+
+//reduce: aggregate array elements into a single value
+//reduce() also takes a second argument which is the starting value
+array.reduce(function(runningTotal, item){
+  var newTotal = runningTotal + item;
+  return newTotal;
+}, 0);
+```
+
+This type of functional programming is incredibly important when developing JavaScript programs (and especially using it for interactive applications)!
